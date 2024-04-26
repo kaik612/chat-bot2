@@ -9,17 +9,25 @@ async function main() {
 
     const app = express();
 
+    // Middleware to parse JSON bodies
+    app.use(express.json());
+
     // Predict!
     app.post("/prediction", async (req, res) => {
-        const prediction = model.respond([
-            { role: "system", content: "You are a helpful AI assistant." },
-            { role: "user", content: req.body.input },
-        ]);
-        let response = '';
-        for await (const text of prediction) {
-            response += text;
+        try {
+            const prediction = await model.respond([
+                { role: "system", content: "You are a helpful AI assistant." },
+                { role: "user", content: req.body.input },
+            ]);
+            let response = '';
+            for await (const text of prediction) {
+                response += text;
+            }
+            res.send(response);
+        } catch (error) {
+            console.error("Error:", error.message);
+            res.status(500).send("Internal Server Error");
         }
-        res.send(response);
     });
 
     const PORT = process.env.PORT || 8080;
