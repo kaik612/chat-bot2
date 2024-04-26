@@ -16,8 +16,8 @@ async function main() {
     app.post("/prediction", async (req, res) => {
         try {
             const prediction = await model.respond([
-                { role: "system", content: "You are a helpful AI assistant." },
-                { role: "user", content: req.body.input },
+                { role: "system", content: "You are a helpful AI assistant that can answer any questions in Japanese, Vietnamese an English." },
+                { role: "user", conten: "Please generate multiple choice questions in Japanese about anything. Include the questions, four choices for each question, the correct answer, and an explanation for the correct answer. Return the response in JSON format, write me in Japanese"},
             ]);
             let response = '';
             for await (const text of prediction) {
